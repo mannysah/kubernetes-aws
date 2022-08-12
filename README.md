@@ -5,6 +5,7 @@
 
 https://medium.com/containermind/how-to-create-a-kubernetes-cluster-on-aws-in-few-minutes-89dda10354f4
 
+Personal notes:
 * brew install awscli
 
 * brew install kops
@@ -16,14 +17,13 @@ Default region name [None]: us-east-1
 Default output format [None]:
 
 
-ICC11575:Workspaces msah$ aws configure list
+$ aws configure list
       Name                    Value             Type    Location
       ----                    -----             ----    --------
    profile                <not set>             None    None
 access_key     ****************WS7A shared-credentials-file    
 secret_key     ****************h1jL shared-credentials-file    
     region                us-east-1      config-file    ~/.aws/config
-ICC11575:Workspaces msah$ 
 
 
 S3 Bucket: 
@@ -48,7 +48,7 @@ Add above code block can be added to the ~/.bash_profile or ~/.profile file depe
 Create a Kubernetes cluster definition using kops by providing the required node count, node size, and AWS zones. The node size or rather the EC2 instance type would need to be decided according to the workload that you are planning to run on the Kubernetes cluster:
 
 
-ICC11575:kubernetes-aws msah$ kops create cluster \
+$ kops create cluster \
 > --node-count=2 \
 > --node-size=t2.medium \
 > --zones=us-east-1a \
@@ -69,9 +69,6 @@ More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgr
 
 
 SSH public key must be specified when running with AWS (create with `kops create secret --name msah.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub`)
-ICC11575:kubernetes-aws msah$ 
-
-
 
 
 
@@ -104,7 +101,7 @@ Then it works -- NOT SURE WHat made it work. Creating ssh key using ssh-keygen o
 
 However, more errors:
 
-ICC11575:kubernetes-aws msah$ kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
+$ kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
 
 *********************************************************************************
 
@@ -158,13 +155,12 @@ W0914 16:36:29.678827   93036 executor.go:118] error running task "LoadBalancerA
 
 
 Validating the instances:
-ICC11575:kubernetes-aws msah$ kops rolling-update cluster
+$ kops rolling-update cluster
 NAME			STATUS	NEEDUPDATE	READY	MIN	MAX	NODES
 master-us-east-1a	Ready	0		1	1	1	1
 nodes			Ready	0		2	2	2	2
 
 No rolling-update required.
-ICC11575:kubernetes-aws msah$ 
 
 
 Validation using kops: 
@@ -172,7 +168,7 @@ Validation using kops:
 kops validate cluster
 `
 
-ICC11575:kubernetes-aws msah$ kops validate cluster
+$ kops validate cluster
 Validating cluster msah.k8s.local
 
 INSTANCE GROUPS
@@ -187,21 +183,18 @@ ip-172-20-42-124.ec2.internal	node	True
 ip-172-20-47-99.ec2.internal	master	True
 
 Your cluster msah.k8s.local is ready
-ICC11575:kubernetes-aws msah$ 
-
 
 * need to deploy the Kubernetes dashboard to access the cluster via its web based user interface:
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 
-ICC11575:kubernetes-aws msah$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 secret/kubernetes-dashboard-certs created
 serviceaccount/kubernetes-dashboard created
 role.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 deployment.apps/kubernetes-dashboard created
 service/kubernetes-dashboard created
-ICC11575:kubernetes-aws msah$
-
+	
 
 
 * Execute the below command to find the admin user’s password:
@@ -212,12 +205,11 @@ ICC11575:kubernetes-aws msah$
 
 * Execute the below command to find the Kubernetes master hostname:
 
-ICC11575:kubernetes-aws msah$ kubectl cluster-info
+$ kubectl cluster-info
 Kubernetes master is running at https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com
 KubeDNS is running at https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-ICC11575:kubernetes-aws msah$ 
 
 
 * Access the Kubernetes dashboard using the following URL:
@@ -226,7 +218,7 @@ https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com/ui
 Screenshot: images/login-screen
 
 username: admin
-password: pSd3HHbrE5ZpsqnAQEca9NH3k0ru70Lq
+password: *********
 
 * GET ADMIN TOKEN 
 kops get secrets admin --type secret -oplaintext
