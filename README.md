@@ -29,19 +29,19 @@ secret_key     ****************h1jL shared-credentials-file
 S3 Bucket: 
 https://s3.console.aws.amazon.com/s3/#
 
-bucket_name=msah-kops-store
+bucket_name=***-kops-store
 aws s3api create-bucket \
 --bucket ${bucket_name} \
 --region us-east-1
 
 Enable versioning for the above S3 bucket:
-aws s3api put-bucket-versioning --bucket msah-kops-store --versioning-configuration Status=Enabled
+aws s3api put-bucket-versioning --bucket ***-kops-store --versioning-configuration Status=Enabled
 
 
 Provide a name for the Kubernetes cluster and set the S3 bucket URL in the following environment variables:
 
-export KOPS_CLUSTER_NAME=msah.k8s.local
-export KOPS_STATE_STORE=s3://msah-kops-store
+export KOPS_CLUSTER_NAME=***.k8s.local
+export KOPS_STATE_STORE=s3://***-kops-store
 
 Add above code block can be added to the ~/.bash_profile or ~/.profile file depending on the operating system to make them available on all terminal environments.
 
@@ -68,7 +68,7 @@ More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgr
 *********************************************************************************
 
 
-SSH public key must be specified when running with AWS (create with `kops create secret --name msah.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub`)
+SSH public key must be specified when running with AWS (create with `kops create secret --name ***.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub`)
 
 
 
@@ -84,15 +84,15 @@ kops update cluster --name ${KOPS_CLUSTER_NAME} --yes
 
 * NOTES: 
 
-** While doing kops update cluster --name ${KOPS_CLUSTER_NAME} --yes - got the error SSH public key must be specified when running with AWS (create with `kops create secret --name msah.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub`)
+** While doing kops update cluster --name ${KOPS_CLUSTER_NAME} --yes - got the error SSH public key must be specified when running with AWS (create with `kops create secret --name ***.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub`)
 
-** kops create secret --name msah.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub 
+** kops create secret --name ***.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub 
    ******* GAVE ERROR ~/.ssh/id_rsa.pub doesnt exist
    ******* Create this file in ~/.ssh folder 
    ******* It gave a different error "Error fingerprinting for user admin: No ssh key found "
    ******* Tried lot of things, nothing worked 
    ******* Tried to kops validate cluster 
-        ********** This gave error context doesnt exist for msah.k8s.local
+        ********** This gave error context doesnt exist for ***.k8s.local
         ********** kubectl config get-contexts -- Shows nothing 
         ********** kubectl config set-cluster with my cluster 
         ********** kubectl config set-context with my cluster 
@@ -127,8 +127,8 @@ I0914 16:36:15.316804   93036 vfs_castore.go:731] Issuing new certificate: "kops
 I0914 16:36:15.324249   93036 vfs_castore.go:731] Issuing new certificate: "kube-scheduler"
 I0914 16:36:15.354690   93036 vfs_castore.go:731] Issuing new certificate: "kube-proxy"
 I0914 16:36:16.844206   93036 executor.go:91] Tasks: 54 done / 77 total; 19 can run
-I0914 16:36:17.426893   93036 launchconfiguration.go:341] waiting for IAM instance profile "masters.msah.k8s.local" to be ready
-I0914 16:36:17.465450   93036 launchconfiguration.go:341] waiting for IAM instance profile "nodes.msah.k8s.local" to be ready
+I0914 16:36:17.426893   93036 launchconfiguration.go:341] waiting for IAM instance profile "masters.***.k8s.local" to be ready
+I0914 16:36:17.465450   93036 launchconfiguration.go:341] waiting for IAM instance profile "nodes.***.k8s.local" to be ready
 I0914 16:36:27.955414   93036 executor.go:91] Tasks: 73 done / 77 total; 3 can run
 I0914 16:36:28.967606   93036 vfs_castore.go:731] Issuing new certificate: "master"
 I0914 16:36:29.295762   93036 executor.go:91] Tasks: 76 done / 77 total; 1 can run
@@ -138,7 +138,7 @@ I0914 16:36:29.678865   93036 executor.go:133] No progress made, sleeping before
 I0914 16:36:39.683766   93036 executor.go:91] Tasks: 76 done / 77 total; 1 can run
 I0914 16:36:40.332740   93036 executor.go:91] Tasks: 77 done / 77 total; 0 can run
 I0914 16:36:40.746195   93036 update_cluster.go:291] Exporting kubecfg for cluster
-kops has set your kubectl context to msah.k8s.local
+kops has set your kubectl context to ***.k8s.local
 
 Cluster changes have been applied to the cloud.
 
@@ -169,7 +169,7 @@ kops validate cluster
 `
 
 $ kops validate cluster
-Validating cluster msah.k8s.local
+Validating cluster ***.k8s.local
 
 INSTANCE GROUPS
 NAME			ROLE	MACHINETYPE	MIN	MAX	SUBNETS
@@ -182,7 +182,7 @@ ip-172-20-35-202.ec2.internal	node	True
 ip-172-20-42-124.ec2.internal	node	True
 ip-172-20-47-99.ec2.internal	master	True
 
-Your cluster msah.k8s.local is ready
+Your cluster ****.k8s.local is ready
 
 * need to deploy the Kubernetes dashboard to access the cluster via its web based user interface:
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
@@ -198,22 +198,22 @@ service/kubernetes-dashboard created
 
 
 * Execute the below command to find the admin user’s password:
-ICC11575:kubernetes-aws msah$ kops get secrets kube --type secret -oplaintext
+$ kops get secrets kube --type secret -oplaintext
 pSd3HHbrE5ZpsqnAQEca9NH3k0ru70Lq
-ICC11575:kubernetes-aws msah$ 
+
 
 
 * Execute the below command to find the Kubernetes master hostname:
 
 $ kubectl cluster-info
-Kubernetes master is running at https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com
-KubeDNS is running at https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Kubernetes master is running at https://api-****-k8s-local-724nhq-**********.us-east-1.elb.amazonaws.com
+KubeDNS is running at https://api-***-k8s-local-724nhq-******.us-east-1.elb.amazonaws.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 
 
 * Access the Kubernetes dashboard using the following URL:
-https://api-msah-k8s-local-724nhq-199393921.us-east-1.elb.amazonaws.com/ui
+https://api-***-k8s-local-724nhq-*******.us-east-1.elb.amazonaws.com/ui
 
 Screenshot: images/login-screen
 
